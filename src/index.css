@@ -1,0 +1,30 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background-color: rebeccapurple;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background-color: blue;
+}
+
+.btn-warning {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background-color: red;
+}
+
+.btn-secondary {
+  padding: 12px 20px;
+  border-radius: 10px;
+  background-color: rgba(102, 51, 153, 0.518);
+}
