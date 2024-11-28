@@ -1,36 +1,42 @@
 import React from "react";
-import styles from "./Header.module.scss";
+// import styles from "./Header.module.scss";
+import "../header/Header.scss";
+import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 function Header({ toggleDarkMode, darkMode }) {
   return (
     <div className={darkMode ? "dark-mode" : "light-mode"}>
-      <header className={styles.header}>
+      <header className="header">
         <div>
-          <a href="">Logo</a>
-          {console.log(styles)}
+          <a href="/">Logo</a>
         </div>
         <nav>
           <ul>
             <li>
-              <a href="#">Home</a>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <a href="#">Shop</a>
+              <NavLink to="/admin/products">Admin</NavLink>
             </li>
             <li>
-              <a href="#">Services</a>
+              <NavLink to="/shop">Shop</NavLink>
             </li>
             <li>
-              <a href="#">Contact</a>
+              <NavLink to="/services">Services</NavLink>
             </li>
-            <button onClick={toggleDarkMode} className={styles.toggleBtn}>
+            <li>
+              <NavLink to="/contact">Contact</NavLink>
+            </li>
+            {/* <button onClick={toggleDarkMode} className={styles.toggleBtn}>
               {darkMode ? (
-                <FontAwesomeIcon icon={faSun} style={{ color: "black" }} />
+                <FontAwesomeIcon icon="fa-solid fa-moon" />
               ) : (
-                <FontAwesomeIcon icon={faMoon} style={{ color: "black" }} />
+                <FontAwesomeIcon icon="fa-solid fa-user" />
               )}
+            </button> */}
+            <button onClick={toggleDarkMode} className="toggleBtn">
+              {darkMode ? "Dark-Mode" : "Light Mode"}
             </button>
           </ul>
         </nav>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Header from "./component/header/Header";
+import Header from "./components/header/Header";
 import ProductList from "./pages/admin/ProductList";
-import Footer from "./component/footer/Footer";
+import Footer from "./components/footer/Footer";
 import ShopPage from "./pages/ShopPage";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -11,6 +11,7 @@ import ServicesPage from "./pages/ServicesPage";
 import ContactPage from "./pages/ContactPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import DashBoardPage from "./pages/admin/DashBoardPage";
+import ProductForm from "./pages/admin/ProductForm";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -38,6 +39,7 @@ function App() {
         <Route path="/admin" element={<DashBoardPage />}>
           {" "}
           <Route path="/admin/products" element={<ProductList />} />
+          <Route path="/admin/add-product" element={<ProductForm />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />}></Route>
