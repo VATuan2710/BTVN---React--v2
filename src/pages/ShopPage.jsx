@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Shop.module.scss";
+import styles from "../assets/scss/Shop.module.scss";
+import { Link } from "react-router-dom";
 
-const Shop = () => {
+const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [limit, setLimit] = useState(10);
   const [skip, setSkip] = useState(0);
@@ -28,7 +29,7 @@ const Shop = () => {
     if (selectedLimit === "all") {
       setLimit(page);
     } else {
-      setLimit(parseInt(selectedLimit));
+      setLimit(selectedLimit);
     }
   };
 
@@ -49,13 +50,13 @@ const Shop = () => {
     setSearchValue(e.target.value);
   };
 
-  const totalPage = Math.ceil(page / limit);
   const renderButtons = () => {
     const buttons = [];
     for (let i = 0; i < totalPage; i++) {
       buttons.push(
         <button
           key={i}
+          className={styles.btnPage}
           onClick={() => setSkip(i * limit)}
           style={{
             fontWeight: skip / limit === i ? "bold" : "normal",
@@ -67,6 +68,8 @@ const Shop = () => {
     }
     return buttons;
   };
+
+  const totalPage = Math.ceil(page / limit);
 
   return (
     <div>
@@ -87,8 +90,12 @@ const Shop = () => {
         {products.map((item) => (
           <div key={item.id} className={styles.productCard}>
             <span>{item.id}</span>
-            <img src={item.thumbnail} alt={"product" + item.id} />
-            <h3>{item.title}</h3>
+            <Link to={`/products/${item.id}`}>
+              <img src={item.thumbnail} alt={"product" + item.id} />
+            </Link>
+            <Link to={`/products/${item.id}`}>
+              <h3>{item.title}</h3>
+            </Link>
             <p>Giá: {item.price}</p>
           </div>
         ))}
@@ -102,4 +109,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default ShopPage;
