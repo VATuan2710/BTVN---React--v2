@@ -1,63 +1,111 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../../assets/scss/ProductForm.scss";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { create, getById, updateById } from "../../axios"; 
+
 const ProductForm = () => {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const navigate = useNavigate();
+  const { id } = useParams();
+  const nav = useNavigate();
+  const initValue = {
+    title: "",
+    price: 0,
+    description: "",
+  };
+  const [product, setProduct] = useState(initValue);
+
+  useEffect(() => {
+    if (id) {
+      (async () => {
+        try {
+          const data = await getById("/products", id);
+          setProduct(data);
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      })();
+    }
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newProduct = {
-      title,
-      price,
-      description,
-    };
-    fetch("http://localhost:3000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        navigate("/admin/products");
-      });
+    (async () => {
+      try {
+        if (id) {
+          await updateById("/products", id, product);
+          alert("Cập nhật sản phẩm thành công!");
+        } else {
+          await create("/products", product);
+          alert("Thêm sản phẩm thành công!");
+        }
+
+        nav("/admin/products");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        alert("Đã xảy ra lỗi, vui lòng thử lại.");
+      }
+    })();
   };
 
   return (
-    <div className="form-container">
-      <h1>Thêm sản phẩm mới</h1>
+    <div>
+      <h1>{id ? "Cập nhật" : "Thêm mới"} sản phẩm</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
+        <div className="form-group">
+          <label htmlFor="title" className="form-label">
+            Title
+          </label>
           <input
+            className="form-control"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            id="title"
+            placeholder="Title"
+            value={product.title}
+            onChange={handleChange}
             required
           />
         </div>
-        <div>
-          <label>Giá:</label>
+
+        <div className="form-group">
+          <label htmlFor="price" className="form-label">
+            Price
+          </label>
           <input
+            className="form-control"
             type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            name="price"
+            id="price"
+            placeholder="Price"
+            value={product.price}
+            onChange={handleChange}
             required
           />
         </div>
-        <div>
-          <label>Mô tả:</label>
+
+        <div className="form-group">
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            className="form-control"
+            name="description"
+            id="description"
+            placeholder="Description"
+            value={product.description}
+            onChange={handleChange}
             required
           />
         </div>
-        <button type="submit">Thêm sản phẩm</button>
+
+        <div className="form-group">
+          <button type="submit" className="btn btn-primary w-100">
+            {id ? "Cập nhật" : "Thêm mới"}
+          </button>
+        </div>
       </form>
     </div>
   );
