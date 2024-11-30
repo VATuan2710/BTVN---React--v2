@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { create, getById, updateById } from "../../axios"; 
+import { create, getById, updateById } from "../../axios";
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -19,7 +19,7 @@ const ProductForm = () => {
           const data = await getById("/products", id);
           setProduct(data);
         } catch (error) {
-          console.error("Error fetching product:", error);
+          console.error(error);
         }
       })();
     }
@@ -36,16 +36,16 @@ const ProductForm = () => {
       try {
         if (id) {
           await updateById("/products", id, product);
-          alert("Cập nhật sản phẩm thành công!");
+          alert("Cập nhật sản phẩm thành công");
         } else {
           await create("/products", product);
-          alert("Thêm sản phẩm thành công!");
+          alert("Thêm sản phẩm thành công");
         }
 
         nav("/admin/products");
       } catch (error) {
-        console.error("Error submitting form:", error);
-        alert("Đã xảy ra lỗi, vui lòng thử lại.");
+        console.error(error);
+        alert("Đã xảy ra lỗi");
       }
     })();
   };

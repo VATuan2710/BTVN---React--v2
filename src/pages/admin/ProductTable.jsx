@@ -11,7 +11,7 @@ const ProductTable = () => {
         const data = await getAll("/products");
         setProducts(data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error(error);
       }
     })();
   }, []);
@@ -24,7 +24,7 @@ const ProductTable = () => {
           const updatedProducts = products.filter((item) => item.id !== id);
           setProducts(updatedProducts);
         } catch (error) {
-          console.error("Error removing product:", error);
+          console.error(error);
         }
       })();
     }
