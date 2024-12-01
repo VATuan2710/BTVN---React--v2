@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -34,19 +34,19 @@ export const removeById = async (path, id) => {
   }
 };
 
-export const create = async (path, data) => {
+export const create = async (path, dataBody) => {
   try {
-    const res = await instance.post(path, data);
-    return res.data;
+    const { data } = await instance.post(path, dataBody);
+    return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateById = async (path, id, data) => {
+export const updateById = async (path, id, dataBody) => {
   try {
-    const res = await instance.put(`${path}/${id}`, data);
-    return res.data;
+    const { data } = await instance.patch(`${path}/${id}`, dataBody);
+    return data;
   } catch (error) {
     console.log(error);
   }

@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "5",
-      "title": "Red Nail Polish 123",
+      "title": "Red Nail Polish 1231",
       "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
       "category": "beauty",
       "price": 8.99,
@@ -1557,9 +1557,9 @@
       "thumbnail": "https://cdn.dummyjson.com/products/images/groceries/Kiwi/thumbnail.png"
     },
     {
-      "id": "c66a",
-      "title": "abcad",
-      "price": "1233",
+      "id": "70fe",
+      "title": "123",
+      "price": "0123",
       "description": "123"
     }
   ],

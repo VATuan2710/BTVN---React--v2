@@ -12,18 +12,19 @@ const ProductForm = () => {
   };
   const [product, setProduct] = useState(initValue);
 
-  useEffect(() => {
-    if (id) {
-      (async () => {
-        try {
-          const data = await getById("/products", id);
-          setProduct(data);
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }
-  }, [id]);
+  id &&
+    useEffect(() => {
+      if (id) {
+        (async () => {
+          try {
+            const data = await getById("/products", id);
+            setProduct(data);
+          } catch (error) {
+            console.error(error);
+          }
+        })();
+      }
+    }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,13 +37,11 @@ const ProductForm = () => {
       try {
         if (id) {
           await updateById("/products", id, product);
-          alert("Cập nhật sản phẩm thành công");
         } else {
           await create("/products", product);
-          alert("Thêm sản phẩm thành công");
         }
 
-        nav("/admin/products");
+        window.confirm("Quay lại trang chủ ?") && nav("/admin/products");
       } catch (error) {
         console.error(error);
         alert("Đã xảy ra lỗi");
