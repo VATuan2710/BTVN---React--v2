@@ -16,6 +16,7 @@ import { getAll, removeById } from "../src/axios/index";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [products, setProducts] = useState([]);
