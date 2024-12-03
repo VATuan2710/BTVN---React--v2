@@ -34,7 +34,7 @@ export const removeById = async (path, id) => {
   }
 };
 
-export const create = async (path, dataBody) => {
+export const createNew = async (path, dataBody) => {
   try {
     const { data } = await instance.post(path, dataBody);
     return data;

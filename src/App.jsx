@@ -13,6 +13,8 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import DashBoardPage from "./pages/admin/DashBoardPage";
 import ProductForm from "./pages/admin/ProductForm";
 import { getAll, removeById } from "../src/axios/index";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -60,6 +62,9 @@ function App() {
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactPage />} />
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         <Route path="/admin" element={<DashBoardPage />}>
           <Route

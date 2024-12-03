@@ -1,10 +1,23 @@
 import React from "react";
 // import styles from "./Header.module.scss";
 import "../header/Header.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Header({ toggleDarkMode, darkMode }) {
+  const nav = useNavigate();
+  const isLoggedIn = localStorage.getItem("accessToken");
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("email");
+    alert("Đăng xuất thành công!");
+    nav("/login");
+  };
+
+  const location = useLocation();
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null;
+  }
   return (
     <div className={darkMode ? "dark-mode" : "light-mode"}>
       <header className="header">
@@ -28,6 +41,15 @@ function Header({ toggleDarkMode, darkMode }) {
             <li>
               <NavLink to="/contact">Contact</NavLink>
             </li>
+            {isLoggedIn ? (
+              <li>
+                <button onClick={handleLogout}>Đăng xuất</button>
+              </li>
+            ) : (
+              <li>
+                <NavLink to="/login">Đăng nhập</NavLink>
+              </li>
+            )}
             {/* <button onClick={toggleDarkMode} className={styles.toggleBtn}>
               {darkMode ? (
                 <FontAwesomeIcon icon="fa-solid fa-moon" />
