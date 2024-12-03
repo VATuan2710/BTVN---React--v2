@@ -8,6 +8,7 @@ import { schemaProduct } from "../../schemas/productSchemas";
 const ProductForm = () => {
   const { id } = useParams();
   const nav = useNavigate();
+  const [loading, setLoading] = useState(false);
   // const initValue = {
   //   title: "",
   //   price: 0,
@@ -68,6 +69,7 @@ const ProductForm = () => {
   // };
 
   const handleAddProduct = async (product) => {
+    setLoading(true);
     try {
       if (id) {
         const data = await updateById("/products", id, product);
@@ -88,6 +90,7 @@ const ProductForm = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
   return (
@@ -159,6 +162,11 @@ const ProductForm = () => {
           </div>
         }
       </form>
+      {loading && (
+        <div className="loader">
+          <span>Đang xử lý...</span>
+        </div>
+      )}
     </div>
   );
 };
