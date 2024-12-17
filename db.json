@@ -2,7 +2,7 @@
   "products": [
     {
       "id": 2,
-      "title": "Eyeshadow Palette with Mirror",
+      "title": "Eyeshadow Palette with Mirror 123",
       "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
       "category": "beauty",
       "price": 19.99,
@@ -1735,6 +1735,12 @@
         "https://cdn.dummyjson.com/products/images/groceries/Kiwi/1.png"
       ],
       "thumbnail": "https://cdn.dummyjson.com/products/images/groceries/Kiwi/thumbnail.png"
+    },
+    {
+      "title": "asdfasxcv",
+      "price": 12312,
+      "description": "",
+      "id": 31
     }
   ]
 }
