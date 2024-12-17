@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,14 +7,14 @@ import {
   createProduct,
   editProduct,
 } from "../../features/products/productAction";
-import { useDispatch } from "react-redux";
-import instance from "../../services";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductForm = () => {
   const { id } = useParams();
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const { products } = useSelector((state) => state.products);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,32 +25,29 @@ const ProductForm = () => {
   });
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      if (id) {
-        try {
-          const response = await instance.get(`/products/${id}`);
-          reset(response.data);
-        } catch (error) {
-          console.error(error);
-        }
+    if (id) {
+      const productEdit = products.find(
+        (product) => product.id === parseInt(id)
+      );
+      if (productEdit) {
+        reset(productEdit);
       }
-    };
-    fetchProduct();
-  }, [id, reset]);
+    }
+  }, [id, products, reset]);
 
-  const handleAddOrUpdateProduct = (data) => {
-    setLoading(true);
+  const handleAddOrUpdateProduct = async (data) => {
+    setIsLoading(true);
     try {
       if (id) {
-        dispatch(editProduct({ id, product: data }));
+        await dispatch(editProduct({ id, product: data })).unwrap();
       } else {
-        dispatch(createProduct(data));
+        await dispatch(createProduct(data)).unwrap();
       }
       nav("/");
     } catch (error) {
       console.error(error);
     }
-    setLoading(false);
+    setIsLoading(false);
   };
 
   return (
@@ -82,6 +79,7 @@ const ProductForm = () => {
             type="number"
             id="price"
             placeholder="Price"
+            step="any"
             {...register("price", { valueAsNumber: true })}
           />
           {errors.price && (
@@ -110,7 +108,8 @@ const ProductForm = () => {
           </button>
         </div>
       </form>
-      {loading && (
+
+      {isLoading && (
         <div className="loader">
           <span>Đang xử lý...</span>
         </div>
