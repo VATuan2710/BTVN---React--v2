@@ -1,91 +1,30 @@
-import { useEffect, useState } from "react";
-import Header from "./components/header/Header";
-import ProductTable from "./pages/admin/ProductTable";
-import Footer from "./components/footer/Footer";
-import ShopPage from "./pages/ShopPage";
-import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { createContext, useEffect, useReducer, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/NotFoundPage";
-import ServicesPage from "./pages/ServicesPage";
-import ContactPage from "./pages/ContactPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
-import DashBoardPage from "./pages/admin/DashBoardPage";
 import ProductForm from "./pages/admin/ProductForm";
-import { getAll, removeById } from "../src/axios/index";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import ProductTable from "./pages/admin/ProductTable";
+import NotFoundPage from "./pages/NotFoundPage";
 
-
-function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await getAll("/products");
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    })();
-  }, []);
-
-  const handleRemoveProduct = (id) => {
-    if (window.confirm("Are you sure?")) {
-      (async () => {
-        try {
-          const res = await removeById("/products", id);
-          if (res.status === 200) {
-            const newProducts = products.filter((item) => item.id !== id);
-            setProducts(newProducts);
-          } else {
-            console.log("Error removing product!");
-          }
-        } catch (error) {
-          console.error("Error deleting product:", error);
-        }
-      })();
-    }
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode((darkMode) => !darkMode);
-  };
-
+const App = () => {
   return (
     <>
-      <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+      {/* <ProductProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/admin/products" element={<ProductTable />} />
+          <Route path="/admin/products/add" element={<ProductForm />} />
+          <Route path="/admin/products/update/:id" element={<ProductForm />} />
+        </Routes>
+      </ProductProvider> */}
+
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/" element={<ProductTable />} />
+        <Route path="/admin/products/add" element={<ProductForm />} />
+        <Route path="/admin/products/edit/:id" element={<ProductForm />} />
 
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-
-        <Route path="/admin" element={<DashBoardPage />}>
-          <Route
-            path="products"
-            element={
-              <ProductTable
-                products={products}
-                onRemove={handleRemoveProduct}
-              />
-            }
-          />
-          <Route path="products/add" element={<ProductForm />} />
-          <Route path="products/update/:id" element={<ProductForm />} />
-        </Route>
-
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
-      <Footer />
     </>
   );
-}
-
+};
 export default App;

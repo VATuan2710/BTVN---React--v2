@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaLogin } from "../schemas/auth";
-import { loginUser } from "../axios/auth";
 import { Link } from "react-router-dom";
 
 const LoginPage = () => {
