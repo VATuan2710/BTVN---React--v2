@@ -1,94 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { createNew, getById, updateById } from "../../axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schemaProduct } from "../../schemas/productSchemas";
+import {
+  createProduct,
+  editProduct,
+} from "../../features/products/productAction";
+import { useDispatch } from "react-redux";
+import instance from "../../services";
 
 const ProductForm = () => {
   const { id } = useParams();
   const nav = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  // const initValue = {
-  //   title: "",
-  //   price: 0,
-  //   description: "",
-  // };
-  // const [product, setProduct] = useState(initValue);
   const {
     register,
-    watch,
-    formState: { errors },
     handleSubmit,
     reset,
-  } = useForm({ resolver: zodResolver(schemaProduct) });
-  console.log(watch("title"));
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schemaProduct),
+  });
 
-  id &&
-    useEffect(() => {
-      (async () => {
-        const data = await getById("/products", id);
-        reset(data);
-      })();
-    }, [id]);
-  // id &&
-  //   useEffect(() => {
-  //     if (id) {
-  //       (async () => {
-  //         try {
-  //           const data = await getById("/products", id);
-  //           setProduct(data);
-  //         } catch (error) {
-  //           console.error(error);
-  //         }
-  //       })();
-  //     }
-  //   }, [id]);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (id) {
+        try {
+          const response = await instance.get(`/products/${id}`);
+          reset(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchProduct();
+  }, [id, reset]);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setProduct((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   (async () => {
-  //     try {
-  //       if (id) {
-  //         await updateById("/products", id, product);
-  //       } else {
-  //         await create("/products", product);
-  //       }
-
-  //       window.confirm("Quay lại trang chủ ?") && nav("/admin/products");
-  //     } catch (error) {
-  //       console.error(error);
-  //       alert("Đã xảy ra lỗi");
-  //     }
-  //   })();
-  // };
-
-  const handleAddProduct = async (product) => {
+  const handleAddOrUpdateProduct = (data) => {
     setLoading(true);
     try {
       if (id) {
-        const data = await updateById("/products", id, product);
-        console.log(data);
+        dispatch(editProduct({ id, product: data }));
       } else {
-        const data = await createNew("/products", product);
-        console.log(data);
+        dispatch(createProduct(data));
       }
-      if (
-        window.confirm(
-          "Sản phẩm đã được thêm/cập nhật thành công. Bạn có muốn quay lại danh sách sản phẩm?"
-        )
-      ) {
-        nav("/admin/products");
-      } else {
-        reset();
-      }
+      nav("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setLoading(false);
   };
@@ -96,7 +56,7 @@ const ProductForm = () => {
   return (
     <div>
       <h1>{id ? "Cập nhật" : "Thêm mới"} sản phẩm</h1>
-      <form onSubmit={handleSubmit(handleAddProduct)}>
+      <form onSubmit={handleSubmit(handleAddOrUpdateProduct)}>
         <div className="form-group">
           <label htmlFor="title" className="form-label">
             Title
@@ -104,16 +64,12 @@ const ProductForm = () => {
           <input
             className="form-control"
             type="text"
-            name="title"
             id="title"
             placeholder="Title"
-            // value={product.title}
-            // onChange={handleChange}
-            // required
-            {...register("title", { required: true })}
+            {...register("title")}
           />
           {errors.title && (
-            <p className="text-danger">{errors.title?.message}</p>
+            <p className="text-danger">{errors.title.message}</p>
           )}
         </div>
 
@@ -124,17 +80,12 @@ const ProductForm = () => {
           <input
             className="form-control"
             type="number"
-            name="price"
             id="price"
             placeholder="Price"
-            step="any"
-            // value={product.price}
-            // onChange={handleChange}
-            // required
-            {...register("price", { required: true, valueAsNumber: true })}
+            {...register("price", { valueAsNumber: true })}
           />
           {errors.price && (
-            <p className="text-danger">{errors.price?.message}</p>
+            <p className="text-danger">{errors.price.message}</p>
           )}
         </div>
 
@@ -144,23 +95,20 @@ const ProductForm = () => {
           </label>
           <textarea
             className="form-control"
-            name="description"
             id="description"
             placeholder="Description"
-            // value={product.description}
-            // onChange={handleChange}
-            // required
-            {...register("description", { required: true })}
+            {...register("description")}
           />
+          {errors.description && (
+            <p className="text-danger">{errors.description.message}</p>
+          )}
         </div>
 
-        {
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary w-100">
-              {id ? "Cập nhật" : "Thêm mới"}
-            </button>
-          </div>
-        }
+        <div className="form-group">
+          <button type="submit" className="btn btn-primary w-100">
+            {id ? "Cập nhật" : "Thêm mới"}
+          </button>
+        </div>
       </form>
       {loading && (
         <div className="loader">

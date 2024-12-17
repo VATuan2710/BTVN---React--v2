@@ -1,11 +1,4 @@
-import axios from "axios";
-
-const instance = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import instance from ".";
 
 export const getAll = async (path) => {
   try {
@@ -36,7 +29,7 @@ export const removeById = async (path, id) => {
 
 export const createNew = async (path, dataBody) => {
   try {
-    const { data } = await instance.post(path, dataBody);
+    const { data } = await instance.post(`${path}`, dataBody);
     return data;
   } catch (error) {
     console.log(error);
@@ -51,5 +44,3 @@ export const updateById = async (path, id, dataBody) => {
     console.log(error);
   }
 };
-
-export default instance;
